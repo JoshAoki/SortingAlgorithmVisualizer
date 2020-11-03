@@ -56,7 +56,13 @@ function changeBool() {
 
 function changeQuickBool() {
   
+  if(checkRun==true) {
     drawQuickSort = true;
+    loop();
+  }
+  else {
+    drawQuickSort = true;
+  }
     
   
   
@@ -119,7 +125,7 @@ function title() {
   textFont('Bungee Shade');
   textSize(30);
   strokeWeight(0);
-  fill(255);
+  fill(0,255,0);
   text('Sorting Algorithm Visualization',80, 50);
 }
 
