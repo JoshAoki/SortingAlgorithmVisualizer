@@ -1,11 +1,16 @@
 let values = [];
 let i = 0;
 let w = 10;
+let states = [];
 
 let button;
 let btnClear;
 
+let callMethod = true;
+//we only want quicksort to run once
 let drawBubbleSort = false;
+let drawQuickSort = false;
+
 let checkRun = false;
 let titleBool = false;
 
@@ -16,7 +21,7 @@ function setup() {
     values[i] = random(height);
     //values[i] = noise(i/100.0)*height;
   }
-  frameRate(10);
+  
 
   drawArray();
   
@@ -29,6 +34,7 @@ function setup() {
   btnQuickSort = createButton('Quick Sort');
   btnQuickSort.size(100,40);
   btnQuickSort.position(840,25);
+  btnQuickSort.mousePressed(changeQuickBool);
 
   btnReset = createButton('Reset Array');
   btnReset.size(80);
@@ -48,6 +54,10 @@ function changeBool() {
   }
 }
 
+function changeQuickBool() {
+  drawQuickSort = true;
+}
+
 function reset() {
   i = 0;
   clear();
@@ -58,6 +68,8 @@ function reset() {
   }
   drawArray();
   drawBubbleSort = false;
+  drawQuickSort = false;
+  callMethod = true;
 
   
 
@@ -71,7 +83,6 @@ if(drawBubbleSort == true) {
   if (i < values.length) {
     for (let j = 0; j < values.length - i - 1; j++) {
       if (values[j] > values[j + 1]) {
-        strokeWeight(0,255,0);
         swap(values, j, j + 1);
       }
     }
@@ -84,6 +95,13 @@ if(drawBubbleSort == true) {
   i++;
   
 
+  drawArray();
+}
+else if (drawQuickSort==true) {
+  if(callMethod){
+    quickSort(values, 0, values.length - 1);
+    callMethod = false;
+  }
   drawArray();
 }
 
@@ -99,17 +117,77 @@ function title() {
   textFont('Bungee Shade');
   textSize(30);
   strokeWeight(0);
-  fill(0, 102, 153);
+  fill(255);
   text('Sorting Algorithm Visualization',80, 50);
 }
 
 function drawArray() {
+  frameRate(10);
   background(51);
   title();
+  
   for (let i = 0; i < values.length; i++) {
     stroke(0);
     fill(255);
-    //stroke(Math.floor(Math.random() * (255 - 0 + 1) + 0));
+    if(drawQuickSort==true){
+      if (states[i] == 0) {
+        fill('#E0777D');
+      } else if (states[i] == 1) {
+        fill('#D6FFB7');
+      } else {
+        fill(255);
+      }
+    }
+    
     rect(i * w , height-values[i], w ,values[i]);
   }
+}
+async function quickSort(arr, start, end) {
+  if (start >= end) {
+    return;
+  }
+  let index = await partition(arr, start, end);
+  states[index] = -1;
+
+  await Promise.all([
+    quickSort(arr, start, index - 1),
+    quickSort(arr, index + 1, end)
+  ]);
+}
+
+async function partition(arr, start, end) {
+  for (let i = start; i < end; i++) {
+    states[i] = 1;
+  }
+
+  let pivotValue = arr[end];
+  let pivotIndex = start;
+  states[pivotIndex] = 0;
+  for (let i = start; i < end; i++) {
+    if (arr[i] < pivotValue) {
+      await quickSwap(arr, i, pivotIndex);
+      states[pivotIndex] = -1;
+      pivotIndex++;
+      states[pivotIndex] = 0;
+    }
+  }
+  await quickSwap(arr, pivotIndex, end);
+
+  for (let i = start; i < end; i++) {
+    if (i != pivotIndex) {
+      states[i] = -1;
+    }
+  }
+
+  return pivotIndex;
+}
+async function quickSwap(arr, a, b) {
+  await sleep(50);
+  let temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
