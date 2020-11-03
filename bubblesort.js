@@ -12,7 +12,6 @@ let drawBubbleSort = false;
 let drawQuickSort = false;
 
 let checkRun = false;
-let checkQuickSortRun = false;
 let titleBool = false;
 
 function setup() {
@@ -64,9 +63,6 @@ function changeQuickBool() {
 }
 
 function reset() {
-  if(checkQuickSortRun==true) {
-    noLoop();
-  }
   i = 0;
   drawBubbleSort = false;
   drawQuickSort = false;
@@ -107,7 +103,6 @@ else if (drawQuickSort==true) {
   if(callMethod){
     quickSort(values, 0, values.length - 1);
     callMethod = false;
-    checkQuickSortRun = true;
   }
   drawArray();
 }
