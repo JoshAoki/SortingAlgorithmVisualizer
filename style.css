@@ -1,3 +1,7 @@
 p {
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Bungee Shade', cursive;
+    font-family: 'Monoton', cursive;
 }
+body {
+    overflow: hidden;
+  }
