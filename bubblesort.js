@@ -12,6 +12,7 @@ let drawBubbleSort = false;
 let drawQuickSort = false;
 
 let checkRun = false;
+let checkQuickSortRun = false;
 let titleBool = false;
 
 function setup() {
@@ -28,17 +29,17 @@ function setup() {
 
   button = createButton('Bubble Sort');
   button.size(100,40);
-  button.position(700,25);
+  button.position(850,25);
   button.mousePressed(changeBool);
 
   btnQuickSort = createButton('Quick Sort');
   btnQuickSort.size(100,40);
-  btnQuickSort.position(840,25);
+  btnQuickSort.position(990,25);
   btnQuickSort.mousePressed(changeQuickBool);
 
-  btnReset = createButton('Reset Array');
+  btnReset = createButton('Reset');
   btnReset.size(80);
-  btnReset.position(980,40);
+  btnReset.position(1130,35);
   btnReset.mousePressed(reset);
 
   
@@ -55,22 +56,27 @@ function changeBool() {
 }
 
 function changeQuickBool() {
-  drawQuickSort = true;
+  
+    drawQuickSort = true;
+    
+  
+  
 }
 
 function reset() {
+  if(checkQuickSortRun==true) {
+    noLoop();
+  }
   i = 0;
+  drawBubbleSort = false;
+  drawQuickSort = false;
+  callMethod = true;
   clear();
-
   values = new Array(floor(width/w));
   for (let i = 0; i < values.length; i++) {
     values[i] = random(height);
   }
   drawArray();
-  drawBubbleSort = false;
-  drawQuickSort = false;
-  callMethod = true;
-
   
 
 }
@@ -101,6 +107,7 @@ else if (drawQuickSort==true) {
   if(callMethod){
     quickSort(values, 0, values.length - 1);
     callMethod = false;
+    checkQuickSortRun = true;
   }
   drawArray();
 }
@@ -123,8 +130,7 @@ function title() {
 
 function drawArray() {
   frameRate(10);
-  background(51);
-  title();
+  background(0);
   
   for (let i = 0; i < values.length; i++) {
     stroke(0);
@@ -141,6 +147,7 @@ function drawArray() {
     
     rect(i * w , height-values[i], w ,values[i]);
   }
+  title();
 }
 async function quickSort(arr, start, end) {
   if (start >= end) {
