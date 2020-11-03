@@ -1,5 +1,7 @@
 let values = [];
 let i = 0;
+let w = 10;
+
 let button;
 let btnClear;
 
@@ -9,14 +11,15 @@ let titleBool = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  values = new Array(width);
+  values = new Array(floor(width/w));
   for (let i = 0; i < values.length; i++) {
     values[i] = random(height);
     //values[i] = noise(i/100.0)*height;
   }
+  frameRate(10);
 
   drawArray();
-  title();
+  
 
   button = createButton('Bubble Sort');
   button.size(100,40);
@@ -49,14 +52,14 @@ function reset() {
   i = 0;
   clear();
 
-  values = new Array(width);
+  values = new Array(floor(width/w));
   for (let i = 0; i < values.length; i++) {
     values[i] = random(height);
   }
   drawArray();
   drawBubbleSort = false;
 
-  title();
+  
 
 }
 
@@ -79,7 +82,7 @@ if(drawBubbleSort == true) {
     checkRun = true;
   }
   i++;
-  title();
+  
 
   drawArray();
 }
@@ -101,10 +104,12 @@ function title() {
 }
 
 function drawArray() {
-  for (let i = 0; i < values.length; i+=10) {
-    strokeWeight(8);
+  background(51);
+  title();
+  for (let i = 0; i < values.length; i++) {
+    stroke(0);
+    fill(255);
     //stroke(Math.floor(Math.random() * (255 - 0 + 1) + 0));
-    stroke(255,0,0);
-    line(i, height, i, height - (values[i]));
+    rect(i * w , height-values[i], w ,values[i]);
   }
 }
