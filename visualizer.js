@@ -22,10 +22,8 @@ function setup() {
     //values[i] = noise(i/100.0)*height;
   }
   
-
   drawArray();
   
-
   button = createButton('Bubble Sort');
   button.size(100,40);
   button.position(850,25);
@@ -39,9 +37,7 @@ function setup() {
   btnReset = createButton('Reset');
   btnReset.size(80);
   btnReset.position(1130,35);
-  btnReset.mousePressed(reset);
-
-  
+  btnReset.mousePressed(reset);  
 }
 
 function changeBool() {
@@ -62,10 +58,7 @@ function changeQuickBool() {
   }
   else {
     drawQuickSort = true;
-  }
-    
-  
-  
+  } 
 }
 
 function reset() {
@@ -79,16 +72,14 @@ function reset() {
     values[i] = random(height);
   }
   drawArray();
-  
-
 }
-
 
 function draw() {
 
 if(drawBubbleSort == true) {
   background(255);
   if (i < values.length) {
+    stroke(0);
     for (let j = 0; j < values.length - i - 1; j++) {
       if (values[j] > values[j + 1]) {
         swap(values, j, j + 1);
@@ -101,8 +92,6 @@ if(drawBubbleSort == true) {
     checkRun = true;
   }
   i++;
-  
-
   drawArray();
 }
 else if (drawQuickSort==true) {
@@ -124,7 +113,7 @@ function swap(arr, a, b) {
 function title() {
   textFont('Bungee Shade');
   textSize(30);
-  strokeWeight(0);
+  stroke(0);
   fill(0,255,0);
   text('Sorting Algorithm Visualization',80, 50);
 }
@@ -132,9 +121,7 @@ function title() {
 function drawArray() {
   frameRate(10);
   background(0);
-  
   for (let i = 0; i < values.length; i++) {
-    stroke(0);
     fill(255);
     if(drawQuickSort==true){
       if (states[i] == 0) {
@@ -186,7 +173,6 @@ async function partition(arr, start, end) {
       states[i] = -1;
     }
   }
-
   return pivotIndex;
 }
 async function quickSwap(arr, a, b) {
