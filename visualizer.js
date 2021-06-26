@@ -84,16 +84,11 @@ function changeBool() {
 }
 
 function changeMergeBool() {
-  for (let i = 0; i < values.length; i++){
-    states[i] = 1;
-  }
-  if(checkRun) {
-    drawMergeSort = true;
-    loop();
-  }
-  else {
-    drawMergeSort = true;
-  }
+  //for (let i = 0; i < values.length; i++) {
+  //  states[i] = 1;
+  //}
+  drawMergeSort = true;
+  loop();
 }
 
 function changeQuickBool() {
@@ -116,7 +111,6 @@ function reset() {
     drawHeapSort = false;
     drawMergeSort = false;
     callMethod = true;
-    allArr = [];
     clear();
   
     values = new Array(floor(width/w));
@@ -127,7 +121,7 @@ function reset() {
   }
 }
 
-function draw() {
+async function draw() {
   if(drawBubbleSort && drawQuickSort == false) {
     background(255);
     if (i < values.length) {
@@ -149,36 +143,39 @@ function draw() {
     }
     i++;
     drawArray();
-    if(isSorted(values)){
+    if(isSorted(values)) {
       drawFinishedArray(x);
       x++;
     }
   }
 
 else if (drawQuickSort) {
-  if(callMethod){
+  if(callMethod) {
     quickSort(values, 0, values.length);
     callMethod = false;
   }
   drawArray();
-  if(isSorted(values)){
+  if(isSorted(values)) {
     drawFinishedArray(x);
     x++;
   }
   }
 
-else if(drawMergeSort){   
-  mergeSort(values, 0, values.length - 1);
+else if(drawMergeSort){ 
+  if(callMethod) {
+    mergeSort(values, 0, values.length - 1);
+    callMethod = false;
+  }  
   drawArray();
-  if(isSorted(values)){
+  if(isSorted(values)) {
     drawFinishedArray(x);
     x++;
   }
 }
-else if(drawHeapSort){
-  heapSort(values);
+else if(drawHeapSort) {
+  await heapSort(values);
   drawArray();
-  if(isSorted(values)){
+  if(isSorted(values)) {
     drawFinishedArray(x);
     x++;
   }
@@ -211,11 +208,14 @@ function drawFinishedArray(x) {
   background(0);
   for (let i = 0; i < values.length; i++) {  
     if(i < x) {
-      if(drawBubbleSort){
-        fill('#A8D5BAFF');
+      if(drawBubbleSort) {
+        fill('#BFFCC6');
       }
-      else{
-        fill('#F9D8CE');
+      else if(drawQuickSort){
+        fill('#957DAD');
+      }
+      else if(drawMergeSort){
+        fill('#81DAFC');
       }
     }
     else{
@@ -231,7 +231,7 @@ function drawArray() {
   background(0);
   for (let i = 0; i < values.length; i++) {   
     fill(255);
-    if(drawQuickSort){
+    if(drawQuickSort) {
       if (states[i] == 0) {
         fill('#68D1C5');
       } else if (states[i] == 1) {
@@ -240,7 +240,7 @@ function drawArray() {
         fill(255);
       }
     }
-    else if(drawBubbleSort){
+    else if(drawBubbleSort) {
       if (states[i] == 0) {
         fill('#D7A9E3FF');
       } else if (states[i] == 1) {
@@ -249,11 +249,11 @@ function drawArray() {
         fill(255);
       }
     }
-    else if(drawMergeSort){
+    else if(drawMergeSort) {
       if (states[i] == 0) {
-        fill('#D7A9E3FF');
+        fill('#B5EAD7');
       } else if (states[i] == 1) {
-        fill('#8BBEE8FF');
+        fill('#C3B1E1');
       } else {
         fill(255);
       }
@@ -272,24 +272,24 @@ function swap(arr, a, b) {
 }
 
 async function heapSort(a) {
-  //setTimeout(40);
-  for (let i = Math.floor(a.length / 2) - 1; i >= 0; i--) {
-    heapify(a, a.length, i);
+  setTimeout(1000);
+  for (let i = Math.floor(a.length / 2) ; i >= 0; i--) {
+    await heapify(a, a.length, i);
   }
 
   for (let i = a.length - 1; i >= 0; i--) {
-      let tmp = a[0];
-      a[0] = a[i];
-      a[i] = tmp;
+    let tmp = a[0];
+    a[0] = a[i];
+    a[i] = tmp;
 
-      allArr.push(a.slice());
+    allArr.push(a.slice());
 
-    heapify(a, i, 0);
+    await heapify(a, i, 0);
   }
 }
 
 async function heapify(a, n, i) {
-  //setTimeout(30);
+  setTimeout(1000);
   let largest = i;
   let l = 2 * i + 1;
   let r = 2 * i + 2;
@@ -317,7 +317,13 @@ async function mergeSort(a, low, high) {
   if (low < high) {
       //pass in array, get mid value, and call mergesort for both sides and merge them together
       let mid = parseInt(((low + high) / 2).toString());
+      for (let i = low; i < mid+1; i++) {
+        states[i] = 1;
+      }
       await mergeSort(a, low, mid);
+      for (let i = mid + 2; i < high+1; i++) {
+        states[i] = 1;
+      }
       await mergeSort(a, mid + 1, high);
       await merge(a, low, mid, high);
   }
@@ -328,10 +334,10 @@ async function merge(a, low, mid, high) {
   //breaks up the array by mid point and creates 2 arrays
   let n1 = mid - low + 1;
   let n2 = high - mid;
-
+  
   let l = new Array(n1);
   let r = new Array(n2);
-
+  
   //fills array with values of array parameter
   for (let i = 0; i < n1; i++) {
       l[i] = a[low + i];
@@ -345,6 +351,7 @@ async function merge(a, low, mid, high) {
   let j = 0;
   let k = low;
   
+  
   //compares every value in the array to the other array and puts the smaller value in a base array w the size of the the original array
   //iterates whichever value is smaller to next integer in that specific array 
   while (i < n1 && j < n2) {
@@ -356,6 +363,8 @@ async function merge(a, low, mid, high) {
           a[k] = r[j];                  
           j++;
       }
+      states[k-1] = -1;
+      states[k] = 0;
       k++;
       allArr.push(a.slice());
   }
@@ -363,22 +372,21 @@ async function merge(a, low, mid, high) {
   while (i < n1) {
       a[k] = l[i];
       i++;
+      states[k-1] = -1;
+      states[k] = 0;
       k++;
-
       allArr.push(a.slice());
   }
 
   while (j < n2) {
       a[k] = r[j];
-      j++;
+      j++;  
+      states[k-1] = -1;
+      states[k] = 0; 
       k++;
-
       allArr.push(a.slice());
   }
 
-  //for (let i = 0; i < n1+n2; i++) {
-  //  states[i] = -1;   
-  //}
 
 }
 async function quickSort(arr, start, end) {
