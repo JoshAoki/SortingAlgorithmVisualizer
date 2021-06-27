@@ -156,7 +156,7 @@ function draw() {
 
 else if (drawQuickSort) {
   if(callMethod) {
-    quickSort(values, 0, values.length);
+    quickSort(values, 0, values.length - 1);
     callMethod = false;
   }
   drawArray();
@@ -214,7 +214,7 @@ function title() {
 function drawFinishedArray(x) {
   frameRate(60);
   background(0);
-  for (let i = 0; i < values.length; i++) {  
+  for (let i = 0; i < values.length - 1; i++) {  
     if(i < x) {
       if(drawBubbleSort) {
         fill('#BFFCC6');
@@ -224,6 +224,9 @@ function drawFinishedArray(x) {
       }
       else if(drawMergeSort){
         fill('#81DAFC');
+      }
+      else if(drawSelectionSort){
+        fill('#75E6DA');
       }
     }
     else{
@@ -237,7 +240,7 @@ function drawFinishedArray(x) {
 function drawArray() {
   frameRate(20);
   background(0);
-  for (let i = 0; i < values.length; i++) {   
+  for (let i = 0; i < values.length - 1; i++) {   
     fill(255);
     if(drawQuickSort) {
       if (states[i] == 0) {
@@ -268,9 +271,9 @@ function drawArray() {
     }
     else if(drawSelectionSort) {
       if (states[i] == 0) {
-        fill('#B5EAD7');
+        fill('#C54B6C');
       } else if (states[i] == 1) {
-        fill('#C3B1E1');
+        fill('#B8E0F6');
       } else {
         fill(255);
       }
@@ -285,6 +288,7 @@ function drawArray() {
 async function selectionSort(a) {
   allArr.push(a.slice());
 
+  //set minIndex to first index and iterate through another for loop to try to find a smaller number, update the current minimum (minIndex)
   for (let i = 0; i < a.length - 1; i++) {
     let minIndex = i;
     for (let j = i + 1; j < a.length; j++) {
@@ -292,11 +296,13 @@ async function selectionSort(a) {
           minIndex = j;
       }
     }
+    //once one iteration(i - index) is done, switch the current minimum(minIndex) w index @ i which should be the first index of unsorted array 
+    //consider the index at current i sorted and keep iterating to repeat
     let tmp = a[minIndex];
     a[minIndex] = a[i];
     a[i] = tmp;
-    states[i] = -1;
-    //states[i] =  1;
+    states[i] = 0;
+    states[i-1] =  -1;
     
     await sleep(50);
     allArr.push(a.slice());
