@@ -15,7 +15,7 @@ let callMethod = true;
 let drawBubbleSort = false;
 let drawQuickSort = false;
 let drawMergeSort = false;
-let drawHeapSort = false; 
+let drawSelectionSort = false; 
 
 let checkRun = false;
 let titleBool = false;
@@ -46,10 +46,10 @@ function setup() {
   btnQuickSort.position(1130, 25);
   btnQuickSort.mousePressed(changeMergeBool);
 
-  btnQuickSort = createButton('Heapsort');
+  btnQuickSort = createButton('Selection Sort');
   btnQuickSort.size(100, 40);
   btnQuickSort.position(710, 25);
-  btnQuickSort.mousePressed(changeHeapBool);
+  btnQuickSort.mousePressed(changeSelectionBool);
 
   btnReset = createButton('Reset');
   btnReset.size(80);
@@ -57,25 +57,31 @@ function setup() {
   btnReset.mousePressed(reset);  
 }
 
-function changeHeapBool() {
-  if(checkRun) {
-    drawHeapSort = true;
+function changeSelectionBool() {
+  if(checkRun && drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false) {
+    for(let i = 0; i < values.length; i++){
+      states[i] = 1;
+    }
+    drawSelectionSort = true;
     loop();
   }
-  else {
-    drawHeapSort = true;
+  else if (drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false){
+    for(let i = 0; i < values.length; i++){
+      states[i] = 1;
+    }
+    drawSelectionSort = true;
   }
 } 
 
 function changeBool() {
-  if(checkRun && drawQuickSort == false && drawMergeSort == false) {
+  if(checkRun && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false && drawBubbleSort == false) {
     drawBubbleSort = true;
     for (let i = 0; i < values.length; i++) {
       states[i] = 1;
     }
     loop();
   }
-  else if(drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false) {
+  else if(drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false) {
     for (let i = 0; i < values.length; i++) {
       states[i] = 1;
     }
@@ -84,31 +90,30 @@ function changeBool() {
 }
 
 function changeMergeBool() {
-  //for (let i = 0; i < values.length; i++) {
-  //  states[i] = 1;
-  //}
-  drawMergeSort = true;
-  loop();
+  if(drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false){
+    drawMergeSort = true;
+    loop();
+  }
 }
 
 function changeQuickBool() {
-  if(checkRun && drawBubbleSort == false && drawMergeSort == false) {
+  if(checkRun && drawBubbleSort == false && drawMergeSort == false && drawSelectionSort == false) {
     drawQuickSort = true;
     loop();
   }
-  else if(drawBubbleSort == false && drawMergeSort == false) {
+  else if(drawBubbleSort == false && drawMergeSort == false && drawSelectionSort == false) {
     drawQuickSort = true;
   } 
 }
 
 function reset() {
-  if(isSorted(values)||(drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false))
+  if(isSorted(values)||(drawBubbleSort == false && drawQuickSort == false && drawMergeSort == false && drawSelectionSort == false))
   {
     i = 0;
     x = 0;
     drawBubbleSort = false;
     drawQuickSort = false;
-    drawHeapSort = false;
+    drawSelectionSort = false;
     drawMergeSort = false;
     callMethod = true;
     clear();
@@ -121,7 +126,7 @@ function reset() {
   }
 }
 
-async function draw() {
+function draw() {
   if(drawBubbleSort && drawQuickSort == false) {
     background(255);
     if (i < values.length) {
@@ -172,8 +177,11 @@ else if(drawMergeSort){
     x++;
   }
 }
-else if(drawHeapSort) {
-  await heapSort(values);
+else if(drawSelectionSort) {
+  if(callMethod) {
+    selectionSort(values);
+    callMethod = false;
+  } 
   drawArray();
   if(isSorted(values)) {
     drawFinishedArray(x);
@@ -258,6 +266,15 @@ function drawArray() {
         fill(255);
       }
     }
+    else if(drawSelectionSort) {
+      if (states[i] == 0) {
+        fill('#B5EAD7');
+      } else if (states[i] == 1) {
+        fill('#C3B1E1');
+      } else {
+        fill(255);
+      }
+    }
     
     rect(i * w , height-values[i], w ,values[i]);
   }
@@ -265,52 +282,31 @@ function drawArray() {
 }
 
 //Sorting Algo Functions
+async function selectionSort(a) {
+  allArr.push(a.slice());
+
+  for (let i = 0; i < a.length - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < a.length; j++) {
+      if (a[j] < a[minIndex]) {
+          minIndex = j;
+      }
+    }
+    let tmp = a[minIndex];
+    a[minIndex] = a[i];
+    a[i] = tmp;
+    states[i] = -1;
+    //states[i] =  1;
+    
+    await sleep(50);
+    allArr.push(a.slice());
+  }
+}
+
 function swap(arr, a, b) {
   let temp = arr[a];
   arr[a] = arr[b];
   arr[b] = temp;
-}
-
-async function heapSort(a) {
-  setTimeout(1000);
-  for (let i = Math.floor(a.length / 2) ; i >= 0; i--) {
-    await heapify(a, a.length, i);
-  }
-
-  for (let i = a.length - 1; i >= 0; i--) {
-    let tmp = a[0];
-    a[0] = a[i];
-    a[i] = tmp;
-
-    allArr.push(a.slice());
-
-    await heapify(a, i, 0);
-  }
-}
-
-async function heapify(a, n, i) {
-  setTimeout(1000);
-  let largest = i;
-  let l = 2 * i + 1;
-  let r = 2 * i + 2;
-
-  if (l < n && a[l] > a[largest]) {
-      largest = l;
-  }
-
-  if (r < n && a[r] > a[largest]) {
-      largest = r;
-  }
-
-  if (largest !== i) {
-      let tmp = a[i];
-      a[i] = a[largest];
-      a[largest] = tmp;
-
-      allArr.push(a.slice());
-
-      heapify(a, n, largest);
-  }
 }
 
 async function mergeSort(a, low, high) {
