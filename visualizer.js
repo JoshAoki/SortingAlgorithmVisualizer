@@ -226,7 +226,7 @@ function drawFinishedArray(x) {
         fill('#81DAFC');
       }
       else if(drawSelectionSort){
-        fill('#218B82');
+        fill('#75E6DA');
       }
     }
     else{
@@ -271,9 +271,9 @@ function drawArray() {
     }
     else if(drawSelectionSort) {
       if (states[i] == 0) {
-        fill('#B8E0F6');
+        fill('#C54B6C');
       } else if (states[i] == 1) {
-        fill('#D5E4C3');
+        fill('#B8E0F6');
       } else {
         fill(255);
       }
@@ -288,6 +288,7 @@ function drawArray() {
 async function selectionSort(a) {
   allArr.push(a.slice());
 
+  //set minIndex to first index and iterate through another for loop to try to find a smaller number, update the current minimum (minIndex)
   for (let i = 0; i < a.length - 1; i++) {
     let minIndex = i;
     for (let j = i + 1; j < a.length; j++) {
@@ -295,6 +296,8 @@ async function selectionSort(a) {
           minIndex = j;
       }
     }
+    //once one iteration(i - index) is done, switch the current minimum(minIndex) w index @ i which should be the first index of unsorted array 
+    //consider the index at current i sorted and keep iterating to repeat
     let tmp = a[minIndex];
     a[minIndex] = a[i];
     a[i] = tmp;
