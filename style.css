@@ -2,6 +2,65 @@ p {
     font-family: 'Bungee Shade', cursive;
     font-family: 'Monoton', cursive;
 }
+
 body {
     overflow: hidden;
+    background: black;
+    margin: 0;
+    padding: 0;
   }
+.container{
+    margin-top: 0px;
+    text-align: center;
+}
+.btn{
+    border: 1px solid #7C5295;
+    background: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    font-family: "Nunito";
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.8s;
+    position: relative;
+    overflow: hidden;
+}
+.btn1,.btn3,.btn5{
+    color: #fff;
+}
+.btn2,.btn4{
+    color: #7C5295;
+}
+.btn1:hover,.btn3:hover,.btn5:hover{
+    color: #7C5295;
+}
+.btn2:hover,.btn4:hover{
+    color: #fff;
+}
+.btn::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #fff;
+    z-index: -1;
+    transition: 0.8s;
+}
+.btn1::before,.btn3::before,.btn5::before{
+    top: 0;
+    border-radius: 0 0 50% 50%;
+}
+.btn2::before,.btn4::before{
+    bottom: 0;
+    border-radius: 50% 50% 0 0;
+}
+.btn2::before,.btn4::before{
+    height: 180%;
+}
+.btn1:hover::before,.btn3:hover::before,.btn5:hover::before{
+    height: 180%;
+}
+.btn2:hover::before,.btn4:hover::before{
+    height: 0%;
+}
