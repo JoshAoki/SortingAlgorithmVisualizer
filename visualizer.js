@@ -18,43 +18,18 @@ let drawMergeSort = false;
 let drawSelectionSort = false; 
 
 let checkRun = false;
-let titleBool = false;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  title();
+  let cnv = createCanvas(windowWidth, 868);
+  let width = windowWidth;
+  cnv.position(0, 70);
   values = new Array(floor(width/w));
   for (let i = 0; i < values.length; i++) {
     values[i] = random(height);
     //values[i] = noise(i/100.0)*height;
   }
   
-  drawArray();
-  
-  button = createButton('Bubble Sort');
-  button.size(100, 40);
-  button.position(850, 25);
-  button.mousePressed(changeBool);
-
-  btnQuickSort = createButton('Quicksort');
-  btnQuickSort.size(100, 40);
-  btnQuickSort.position(990, 25);
-  btnQuickSort.mousePressed(changeQuickBool);
-
-  btnQuickSort = createButton('Merge Sort');
-  btnQuickSort.size(100, 40);
-  btnQuickSort.position(1130, 25);
-  btnQuickSort.mousePressed(changeMergeBool);
-
-  btnQuickSort = createButton('Selection Sort');
-  btnQuickSort.size(100, 40);
-  btnQuickSort.position(710, 25);
-  btnQuickSort.mousePressed(changeSelectionBool);
-
-  btnReset = createButton('Reset');
-  btnReset.size(80);
-  btnReset.position(1290, 35);
-  btnReset.mousePressed(reset);  
+  drawArray(); 
 }
 
 function changeSelectionBool() {
@@ -201,15 +176,6 @@ function isSorted(arr) {
   return true;
 }
 
-//Title
-function title() {
-  textFont('Bungee Shade');
-  textSize(30);
-  stroke(0);
-  fill(197, 139, 231);
-  text('Sorting Algos', 80, 50);
-}
-
 //drawArray functions
 function drawFinishedArray(x) {
   frameRate(60);
@@ -233,7 +199,6 @@ function drawFinishedArray(x) {
       fill(255);
     }
     rect(i * w , height-values[i], w ,values[i]);
-    title();
   }
 }
 
@@ -281,7 +246,6 @@ function drawArray() {
     
     rect(i * w , height-values[i], w ,values[i]);
   }
-  title();
 }
 
 //Sorting Algo Functions
